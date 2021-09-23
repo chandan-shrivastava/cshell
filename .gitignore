@@ -52,4 +52,5 @@ Mkfile.old
 dkms.conf
 
 # Executable and history file
-shell
+cshell
+history.txt
