@@ -92,7 +92,7 @@ void writehistorytofile(char cmd[])
 	int count_lines = 0;
 	if (file == NULL)
 	{
-		printf("Unable to write history to file %s\n", file_name);
+		fprintf(stderr,"Unable to write history to file %s\n", file_name);
 		return;
 	}
 	while (chr != EOF)

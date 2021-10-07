@@ -7,7 +7,7 @@ void cd()
 	{
 		if (chdir(home_dir) < 0)
 		{
-			perror("Error changing directory");
+			fprintf(stderr,"Error changing directory\n");
 		}
 		else
 		{
@@ -22,7 +22,7 @@ void cd()
 		strcat(curr_dir, name);
 		if (chdir(curr_dir) < 0)
 		{
-			perror("Error changing directory");
+			fprintf(stderr,"Error changing directory\n");
 		}
 		else
 		{
@@ -36,7 +36,7 @@ void cd()
 			printf("%s\n", prev_dir);
 			if (chdir(prev_dir) < 0)
 			{
-				perror("Error changing directory");
+				fprintf(stderr,"Error changing directory\n");
 			}
 			else
 			{
@@ -45,14 +45,14 @@ void cd()
 		}
 		else
 		{
-			printf("OLDPWD not set\n");
+			fprintf(stderr,"OLDPWD not set\n");
 		}
 	}
 	else
 	{
 		if (chdir(command[1]) < 0)
 		{
-			perror("");
+			fprintf(stderr,"Error changing directory\n");
 		}
 		else
 		{

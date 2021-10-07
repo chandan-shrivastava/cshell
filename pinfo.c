@@ -13,7 +13,7 @@ void processstatus(int pid)
 	int flag = 0;
 	if (fp1 == NULL)
 	{
-		printf("Error opening %s file\n", path2);
+		fprintf(stderr,"Error opening %s file\n", path2);
 	}
 	else
 	{
@@ -37,7 +37,7 @@ void processstatus(int pid)
 	}
 	if (fp == NULL)
 	{
-		printf("Error opening %s file\n", path);
+		fprintf(stderr,"Error opening %s file\n", path);
 	}
 	else
 	{
@@ -70,7 +70,7 @@ void memory(int pid)
 	int flag = 0;
 	if (fp == NULL)
 	{
-		printf("Error opening %s file\n", path);
+		fprintf(stderr,"Error opening %s file\n", path);
 	}
 	else
 	{
@@ -98,7 +98,7 @@ void executable(int pid)
 	size_t ret = readlink(path1, buf, 1024);
 	if (fp3 == NULL)
 	{
-		printf("Error opening %s file\n", path1);
+		fprintf(stderr,"Error opening %s file\n", path1);
 	}
 	else if (ret > 0)
 	{
@@ -116,7 +116,7 @@ void executable(int pid)
 	}
 	else
 	{
-		printf("Error opening %s file\n", path1);
+		fprintf(stderr,"Error opening %s file\n", path1);
 	}
 }
 

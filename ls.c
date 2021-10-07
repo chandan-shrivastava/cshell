@@ -105,7 +105,7 @@ void lsfull(char filepath[], char *file)
 	}
 	else
 	{
-		printf("Error reading file permission!");
+		fprintf(stderr,"Error reading file permission!\n");
 	}
 }
 
@@ -198,7 +198,7 @@ void lspath(char path[], int lsl, int lsa)
 		}
 		else
 		{
-			perror("Error opening directory or file!");
+			fprintf(stderr,"Error opening directory or file!\n");
 		}
 	}
 }

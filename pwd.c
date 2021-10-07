@@ -8,7 +8,7 @@ void pwd()
 	}
 	else
 	{
-		printf("Error getting current working directory");
+		fprintf(stderr,"Error getting current working directory\n");
 	}
 	printf("\n");
 }

@@ -1,6 +1,6 @@
 #include "execute.h"
 
-void execute()
+void execute(char cmd[])
 {
 	if (command[0] != NULL)
 	{
@@ -12,6 +12,18 @@ void execute()
 				bg = 1;
 				command[i] = "";
 				break;
+			}
+		}
+		if (strstr(cmd, "<") || strstr(cmd, ">"))
+		{
+			redirect(cmd);
+			for (int i = 0; i < args; i++)
+			{
+				if (!strcmp(command[i], ">") || !strcmp(command[i], ">>") || !strcmp(command[i], "<"))
+				{
+					fprintf(stderr,"Invalid Syntax\n");
+					return;
+				}
 			}
 		}
 		if (!strcmp(command[0], "quit"))
@@ -43,28 +55,48 @@ void execute()
 		{
 			pinfo();
 		}
+		else if (!strcmp(command[0], "replay"))
+		{
+			replay();
+		}
 		else if (!strcmp(command[0], "history"))
 		{
 			if (args > 2)
 			{
-				printf("Too many arguments\n");
+				fprintf(stderr,"Too many arguments\n");
 				return;
 			}
 			history();
 		}
+		else if (!strcmp(command[0], "bg"))
+		{
+			if (args != 2)
+			{
+				fprintf(stderr, "Incorrect number of arguments");
+				return;
+			}
+			bgfunc();
+		}
+		else if (!strcmp(command[0], "fg"))
+		{
+			fg();
+		}
+		else if (!strcmp(command[0], "jobs"))
+		{
+			jobs();
+		}
+		else if (!strcmp(command[0], "sig"))
+		{
+			if (args != 3)
+			{
+				fprintf(stderr, "Incorrect number of Arguments\n");
+				return;
+			}
+			sig();
+		}
 		else if (!strcmp(command[0], "repeat"))
 		{
-			int repeatcount = atoi(command[1]);
-			for (int z = 0; z < args-2; z++)
-			{
-				command[z] = (char *)malloc((strlen(command[z+2])+1)*sizeof(char));
-				strcpy(command[z], command[z+2]);
-			}
-			command[args-2]="";
-			command[args-1]="";
-			args = args - 2;
-			for (int z=0;z<repeatcount;z++)
-				execute(args);
+			repeat(cmd);
 		}
 		else
 		{

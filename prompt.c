@@ -19,6 +19,6 @@ void prompt()
 	}
 	else
 	{
-		printf("Error getting current directory");
+		fprintf(stderr,"Error getting current directory\n");
 	}
 }

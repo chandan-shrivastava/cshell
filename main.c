@@ -24,40 +24,31 @@ int removewhitespaces(char str[])
 	return i;
 }
 
-void signal_handler(int signal)
-{
-	int status;
-	char *name;
-	pid_t pid = waitpid(-1, &status, WNOHANG);
-	if (pid > 0)
-	{
-		if (!status)
-			fprintf(stderr, "\n%s with pid %d exited normally\n", pid1[pid], pid);
-		else
-			fprintf(stderr, "\n%s with pid %d exited abnormally\n", pid1[pid], pid);
-		prompt();
-		fflush(stdout);
-	}
-}
-
 int main()
 {
 	int ch;
-	clearScreen();
+	// clearScreen();
+	jobno = 0;
 	getcwd(curr_dir, sizeof(curr_dir));
 	strcpy(prev_dir, "");
 	strcpy(home_dir, curr_dir);
 	h = prevhistory();
 	signal(SIGCHLD, signal_handler);
+	signal(SIGINT, signal_control_c);
+	signal(SIGTSTP, signal_control_z);
 	shellpid = getpid();
 	int xyz = 0;
 	FILE *fp;
 	fp = fopen("history.txt", "w");
 	fclose(fp);
+	curr_fg_pid = 0;
+	shellin = dup(STDIN_FILENO);
+	shellout = dup(STDOUT_FILENO);
 	while (1)
 	{
 		prompt();
 		size_t bufSize = 0;
+		curr_fg_pid = 0;
 		int readlines;
 		char *scan = 0;
 		xyz += 1;
@@ -68,7 +59,9 @@ int main()
 			exit(0);
 		}
 		if (scan[0] == '\0')
+		{
 			continue;
+		}
 		int i = 0;
 		char *token = strtok(scan, ";");
 		if (token != NULL)
@@ -83,10 +76,16 @@ int main()
 				inputs[i++] = token;
 			}
 		}
+		if (!strcmp(inputs[0], "\n"))
+		{
+			continue;
+		}
 		for (int j = 0; j < i; j++)
 		{
 			if (inputs[j] != NULL)
 			{
+				curr_fg_pid = 0;
+
 				char *lastline = getlastline();
 				strcat(lastline, "\n");
 				if (xyz == 1 || strcmp(lastline, inputs[j]) != 0)
@@ -94,8 +93,21 @@ int main()
 					strcpy(his[h++ % 20], inputs[j]);
 					writehistorytofile(inputs[j]);
 				}
+				strcpy(temp_inputs, inputs[j]);
 				args = removewhitespaces(inputs[j]);
-				execute();
+				if (strstr(temp_inputs, "|"))
+				{
+					int len = strlen(temp_inputs);
+					if (temp_inputs[len - 1] == '\n')
+						temp_inputs[len - 1] = 0;
+					execpipe(temp_inputs);
+				}
+				else
+				{
+					execute(temp_inputs);
+				}
+				dup2(shellin, STDIN_FILENO);
+				dup2(shellout, STDOUT_FILENO);
 			}
 		}
 	}
