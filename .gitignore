@@ -52,5 +52,6 @@ Mkfile.old
 dkms.conf
 
 # Executable and history file
-cshell
+.vscode
+c-shell
 history.txt
