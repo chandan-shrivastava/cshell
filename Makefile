@@ -1,2 +1,2 @@
 all:
-	gcc *.c -o c-shell
+	gcc *.c -o c-shell -fcommon
